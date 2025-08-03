@@ -100,5 +100,15 @@ With the powerful combination of **Golang and Docker multi-stage builds**, the f
 
 ## 📄 License
 
-This setup is based on [Caddy](https://github.com/caddyserver/caddy), which is licensed under the **Apache 2.0 License**.
+This setup is based on [Caddy](https://github.com/caddyserver/caddy), which is licensed under the **Apache 2.0 License**. 
 
+## 📬 Contact
+
+If you'd like to connect professionally or are a recruiter looking for a skilled DevOps/Cloud Engineer, feel free to reach out:
+
+- **LinkedIn:** [linkedin.com/in/mdomer529](https://linkedin.com/in/mdomer529)
+- **Email:** omermd529@gmail.com
+- **Phone:** +91-9032448366
+
+I’m actively open to remote **DevOps** or **DevSecOps** opportunities with a focus on:
+**Docker**, **AWS**, **Azure**, **CI/CD**, **Terraform**, **security practices**, and **infrastructure automation**.
