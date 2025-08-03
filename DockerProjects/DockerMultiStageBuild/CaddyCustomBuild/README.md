@@ -1,106 +1,96 @@
-# 🐳 Caddy Custom Docker Build
+# 🐳 Caddy Custom Build with Docker Multi-Stage
 
-This folder contains a multi-stage Docker setup to build [Caddy](https://github.com/caddyserver/caddy) from source using your own fork, and optionally serve static content.
-
----
-
-## 📁 Folder Contents
-
-- `Dockerfile` – Multi-stage Dockerfile that builds Caddy from Go source and produces a minimal Alpine-based image.
-- `Caddyfile` – Basic Caddy configuration to serve static files from `/srv`.
-- `site/` – Directory containing static content (e.g. `index.html`) served by Caddy.
-- `caddy/` – Local copy of Caddy source, used to build the custom image.
+[![Built with Docker Multi-Stage](https://img.shields.io/badge/Built%20With-Docker%20Multi--Stage-blue?logo=docker&logoColor=white)](https://docs.docker.com/build/building/multi-stage/)
+[![Go](https://img.shields.io/badge/Powered%20by-Go-00ADD8?logo=go&logoColor=white)](https://go.dev)
+[![DevSecOps Ready](https://img.shields.io/badge/DevSecOps-Ready-brightgreen?logo=security&logoColor=white)](https://en.wikipedia.org/wiki/DevSecOps)
+[![Image Size](https://img.shields.io/badge/Image%20Size-72.5MB-blueviolet)](#)
+[![CI/CD Ready](https://img.shields.io/badge/CI%2FCD-Compatible-yellow?logo=githubactions&logoColor=white)](#)
 
 ---
 
-## 🚀 Usage
+## 📦 Overview
 
-### 🔧 Build Docker Image
+This project demonstrates how to build and run the **Caddy web server** using a **Docker multi-stage build** approach to drastically reduce the final image size and improve container performance.
+
+It includes:
+
+- A production-ready `Dockerfile` using multi-stage builds
+- A static `Caddyfile` to serve files from a `site/` folder
+- A `Dockerfile.single-stage` for comparison
+
+---
+
+## 🏗️ Project Structure
 
 ```bash
-docker build -t my-caddy .
+CaddyCustomBuild/
+├── caddy/                # Caddy source code (copied from fork)
+├── Caddyfile             # Caddy server configuration
+├── site/                 # Static files served by Caddy
+├── Dockerfile            # Multi-stage Docker build
+├── Dockerfile.single-stage # Single-stage Dockerfile for comparison
+└── README.md
 ```
-
-### ▶️ Run the Container
-
-```bash
-docker run -d -p 80:80 \
-  -v $(pwd)/Caddyfile:/etc/caddy/Caddyfile \
-  -v $(pwd)/site:/srv \
-  my-caddy
-```
-
-### 🌐 Access
-
-Open your browser and visit:
-
-```
-http://localhost
-```
-
-You should see your static site's `index.html` served by Caddy.
 
 ---
 
-## 🛠️ Optional Improvements
+## 🆚 Single-Stage vs Multi-Stage Docker Builds
 
-- Add plugins using [`xcaddy`](https://github.com/caddyserver/xcaddy)
-- Serve a Go API backend (reverse proxy)
-- Add HTTPS and TLS settings in the `Caddyfile`
-- Use GitHub Actions to automate image builds
-- Push built image to Docker Hub or GitHub Container Registry (GHCR)
+As part of this project, I experimented with both **single-stage** and **multi-stage** Dockerfiles to build the Caddy server from source using Go.
 
----
+| Feature                      | Single-Stage Build                    | Multi-Stage Build                     |
+|------------------------------|----------------------------------------|----------------------------------------|
+| **Image Tag**                | `my-caddy-single-stage`               | `my-caddy`                             |
+| **Image Size**               | ❌ `1.2 GB`                            | ✅ `72.5 MB`                            |
+| **Includes Go toolchain?**   | ✅ Yes (not needed at runtime)         | ❌ No (only final binary)              |
+| **Build Caching**            | ❌ Less efficient                      | ✅ Efficient separation of concerns    |
+| **Security Surface**         | ❌ Larger                              | ✅ Smaller, minimal final image        |
+| **Prod Readiness**           | ❌ Not recommended                     | ✅ Yes                                  |
 
-## 🧱 Example Caddyfile
+### ⚙️ Observations
 
-Here's a simple `Caddyfile` used in this project:
-
-```
-:80
-
-root * /srv
-file_server
-```
-
-This tells Caddy to listen on port 80 and serve files from `/srv`, which is mapped to your local `site/` folder.
+- The **single-stage build** includes all development tools, source files, and compilers, inflating the final image to **1.2 GB**.
+- The **multi-stage build** strips away everything except the `caddy` binary and necessary configs/static files, resulting in a lean **72.5 MB** image.
+- This dramatic size reduction is made possible through the **powerful combination of Go and Docker multi-stage builds**.
 
 ---
 
 ## 🧠 Learnings & Key Takeaways
 
-### 🛠️ Technical Skills Practiced
-- ✅ Built a Docker **multi-stage image** from source using Go (Golang)
-- ✅ Learned how to use `Dockerfile` efficiently to separate build and runtime stages
-- ✅ Integrated a real-world open-source project (Caddy) into a custom build process
-- ✅ Used `alpine` and `scratch` images for lightweight final containers
-- ✅ Served static files using Caddy and a minimal configuration (`Caddyfile`)
-- ✅ Gained experience troubleshooting **Git submodules**, **symlinks**, and `.git` folders
-- ✅ Used `rm -rf`, `cp -R`, and Git commands to clean and refactor repo structure
-
-### 🔁 Git & GitHub Workflow
-- ✅ Forked and cloned a real project (Caddy)
-- ✅ Used `git remote`, `git add`, `git rm`, and `git push` with SSH authentication
-- ✅ Handled submodule errors by removing `.git` internals
-- ✅ Created a separate branch (`add-caddy-multistage`) for clean commits and PR tracking
-
-### 📦 DevOps Principles Applied
-- Emphasis on **clean build pipelines** and separating build context from runtime
-- Leveraged **small base images** and minimal dependencies
-- Practiced **layer caching** and optimization for faster Docker builds
-
-### 📉 Lightweight Final Image
-With the powerful combination of **Golang and Docker multi-stage builds**, the final container image size was only **72.5 MB** — demonstrating best practices in image optimization.
+- Learned to work with multi-stage Docker builds to reduce image bloat.
+- Understood the structure of a Go project compiled from source in containers.
+- Gained hands-on experience with lightweight Alpine-based builds.
+- Built confidence in isolating dev tools from runtime environments.
+- Applied `.dockerignore` and `.gitignore` to keep the image lean.
+- Practiced working with local volumes and testing containerized static servers.
 
 ---
 
-🚀 This project helped me deepen my understanding of real-world Docker image construction, multi-stage builds, and source-code-based containerization. It also improved my confidence working with Git, submodules, and project structure cleanup.
+## ▶️ Usage
+
+### 🛠 Build multi-stage image
+
+```bash
+docker build -t my-caddy .
+```
+
+### 🛠 Build single-stage image
+
+```bash
+docker build -f Dockerfile.single-stage -t my-caddy-single-stage .
+```
+
+### ▶️ Run container (multi-stage image)
+
+```bash
+docker run -d -p 8080:80 \
+  -v $(pwd)/site:/srv \
+  my-caddy
+```
+
+Access at: [http://localhost:8080](http://localhost:8080)
 
 ---
-
-## 📄 License
-
-This setup is based on [Caddy](https://github.com/caddyserver/caddy), which is licensed under the **Apache 2.0 License**. 
 
 ## 📬 Contact
 
@@ -112,3 +102,6 @@ If you'd like to connect professionally or are a recruiter looking for a skilled
 
 I’m actively open to remote **DevOps** or **DevSecOps** opportunities with a focus on:
 **Docker**, **AWS**, **Azure**, **CI/CD**, **Terraform**, **security practices**, and **infrastructure automation**.
+
+---
+
