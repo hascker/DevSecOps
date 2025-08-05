@@ -13,7 +13,7 @@
 | Folder Name              | Description                                                                 | Status / README Link                         |
 |--------------------------|-----------------------------------------------------------------------------|----------------------------------------------|
 | 🐧 `bash-projects/`       | Bash automation scripts for system tasks, file sorting, log parsing, etc.   | [View README »](./bash-projects/README.md)   |
-| 🐳 `DockerProjects/`      | Multi-stage Docker builds, app containerization, image optimization         | [View README »](./DockerProjects/README.md)  |
+| 🐳 `DockerProjects/`      | Multi-stage Docker builds, app containerization, image optimization         | [View README »](https://github.com/omermd529/OmerOps/blob/main/DockerProjects/DockerMultiStageBuild/CaddyCustomBuild/README.md)  |
 | ☸️ `kubernetes-projects/` | Kubernetes manifests, Helm charts, deployments, and service orchestration   | _Coming Soon_                                |
 | ☁️ `aws-projects/`        | Projects using EC2, Lambda, S3, CloudWatch, and Terraform-based automation  | _Coming Soon_                                |
 | 🔷 `azure-projects/`      | Azure DevOps pipelines, ARM templates, AKS deployments                      | _Coming Soon_                                |
