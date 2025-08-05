@@ -1,4 +1,4 @@
-i# OmerOpsHub ⚙️🐧
+# OmerOpsHub ⚙️🐧
 
 > A unified **DevSecOps portfolio** by **Omer Mohammed** showcasing hands-on projects across **Bash**, **Go**, **Docker**, **Kubernetes**, **AWS**, **Azure**, **GCP**, and **Infrastructure as Code** — with a strong focus on **security automation** and best practices.
 
