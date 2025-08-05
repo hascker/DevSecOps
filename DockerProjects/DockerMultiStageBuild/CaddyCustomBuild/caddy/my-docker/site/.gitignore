@@ -1,0 +1,9 @@
+# Ignore all files
+*
+
+# But allow this .gitignore file to remain
+!.gitignore
+
+# Optionally allow sample files
+!index.html
+
