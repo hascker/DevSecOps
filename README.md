@@ -1,4 +1,4 @@
-i# OmerOpsHub ⚙️🐧
+# OmerOpsHub ⚙️🐧
 
 > A unified **DevSecOps portfolio** by **Omer Mohammed** showcasing hands-on projects across **Bash**, **Go**, **Docker**, **Kubernetes**, **AWS**, **Azure**, **GCP**, and **Infrastructure as Code** — with a strong focus on **security automation** and best practices.
 
@@ -12,7 +12,7 @@ i# OmerOpsHub ⚙️🐧
 
 | Folder Name              | Description                                                                 | Status / README Link                         |
 |--------------------------|-----------------------------------------------------------------------------|----------------------------------------------|
-| 🐧 `bash-projects/`       | Bash automation scripts for system tasks, file sorting, log parsing, etc.   | [View README »](./bash-projects/README.md)   |
+| 🐧 `bash-projects/`       | Bash automation scripts for system tasks, file sorting, and automation      | [View README »](./bash-projects/README.md)   |
 | 🐳 `DockerProjects/`      | Multi-stage Docker builds, app containerization, image optimization         | [View README »](./DockerProjects/README.md)  |
 | ☸️ `kubernetes-projects/` | Kubernetes manifests, Helm charts, deployments, and service orchestration   | _Coming Soon_                                |
 | ☁️ `aws-projects/`        | Projects using EC2, Lambda, S3, CloudWatch, and Terraform-based automation  | _Coming Soon_                                |
