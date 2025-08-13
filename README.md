@@ -12,10 +12,8 @@
 
 | Folder Name              | Description                                                                 | Status / README Link                         |
 |--------------------------|-----------------------------------------------------------------------------|----------------------------------------------|
-
 | 🐧 `bash-projects/`       | Bash automation scripts for system tasks, file sorting, and automation      | [View README »](./bash-projects/README.md)   |
-| 🐳 `DockerProjects/`      | Multi-stage Docker builds, app containerization, image optimization         | [View README »](./DockerProjects/README.md)  |
-
+| 🐳 `DockerProjects/`      | Multi-stage builds, multi-arch images, app containerization, optimization   | [View README »](./DockerProjects/README.md)  |
 | ☸️ `kubernetes-projects/` | Kubernetes manifests, Helm charts, deployments, and service orchestration   | _Coming Soon_                                |
 | ☁️ `aws-projects/`        | Projects using EC2, Lambda, S3, CloudWatch, and Terraform-based automation  | _Coming Soon_                                |
 | 🔷 `azure-projects/`      | Azure DevOps pipelines, ARM templates, AKS deployments                      | _Coming Soon_                                |
@@ -27,7 +25,7 @@
 ## 🎯 Core Skills & Focus Areas
 
 - ✅ Bash scripting & CLI automation
-- ✅ Docker & multi-stage container builds
+- ✅ Docker & multi-stage/multi-arch container builds
 - ✅ Kubernetes orchestration (Helm, YAML)
 - ✅ AWS, Azure, GCP cloud deployments
 - ✅ Infrastructure as Code (Terraform, Pulumi)

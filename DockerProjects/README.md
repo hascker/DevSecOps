@@ -10,6 +10,7 @@
 |---------|-------------|--------------|
 | **Docker/** | Basic Python web application containerization | Simple Dockerfile, Python Flask app |
 | **DockerMultiStageBuild/CaddyCustomBuild/** | Multi-stage Caddy web server build | Multi-stage optimization, custom Caddy build |
+| **MultiArchDemo/** | Multi-architecture Docker builds | Cross-platform compilation, Docker Buildx |
 
 ---
 
@@ -35,12 +36,21 @@ docker build -t caddy-custom .
 docker run -p 80:80 caddy-custom
 ```
 
+#### 3. Multi-Architecture Demo
+```bash
+cd MultiArchDemo/
+chmod +x build.sh
+./build.sh
+```
+
 ---
 
 ## 🛠️ Technologies Used
 
 - **Docker** - Containerization platform
+- **Docker Buildx** - Multi-platform build support
 - **Python Flask** - Web application framework
+- **Go** - Cross-platform compilation
 - **Caddy** - Modern web server with automatic HTTPS
 - **Multi-stage builds** - Image size optimization
 
@@ -50,9 +60,11 @@ docker run -p 80:80 caddy-custom
 
 - ✅ Container image creation and optimization
 - ✅ Multi-stage build patterns
+- ✅ Multi-architecture builds (AMD64, ARM64, ARMv7)
 - ✅ Application containerization best practices
 - ✅ Docker security considerations
 - ✅ Image size reduction techniques
+- ✅ Cross-platform deployment strategies
 
 ---
 
