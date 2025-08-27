@@ -20,7 +20,7 @@
 | ☁️ `aws-projects/`        | Projects using EC2, Lambda, S3, CloudWatch, and Terraform-based automation  | _Coming Soon_                                    |
 | 🔷 `azure-projects/`      | Azure DevOps pipelines, ARM templates, AKS deployments                      | _Coming Soon_                                    |
 | 🌐 `gcp-projects/`        | GCP projects including GKE, Cloud Run, IAM policies, and infrastructure     | _Coming Soon_                                    |
-| 🛡️ `devsecops-projects/` | DevSecOps-focused projects: CI/CD security checks, IaC scans, policy-as-code| [Harness Demo CI/CD »](./devsecops-projects/harness-demo-cicd/README.md) |
+| 🛡️ `devsecops-projects/` | DevSecOps-focused projects: CI/CD security checks, IaC scans, policy-as-code| [Harness Demo CI/CD »](./devsecops-projects/harness-demo/README.md) |
 
 ---
 
