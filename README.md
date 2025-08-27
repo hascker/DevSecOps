@@ -1,5 +1,7 @@
 # OmerOpsHub ⚙️🐧
 
+
+
 > A unified **DevSecOps portfolio** by **Omer Mohammed** showcasing hands-on projects across **Bash**, **Go**, **Docker**, **Kubernetes**, **AWS**, **Azure**, **GCP**, and **Infrastructure as Code** — with a strong focus on **security automation** and best practices.
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/omermd529/OmerOps?style=flat-square)
@@ -10,15 +12,15 @@
 
 ## 📁 Project Index
 
-| Folder Name              | Description                                                                 | Status / README Link                         |
-|--------------------------|-----------------------------------------------------------------------------|----------------------------------------------|
-| 🐧 `bash-projects/`       | Bash automation scripts for system tasks, file sorting, and automation      | [View README »](./bash-projects/README.md)   |
-| 🐳 `DockerProjects/`      | Multi-stage builds, multi-arch images, app containerization, optimization   | [View README »](./DockerProjects/README.md)  |
-| ☸️ `kubernetes-projects/` | Kubernetes manifests, Helm charts, deployments, and service orchestration   | _Coming Soon_                                |
-| ☁️ `aws-projects/`        | Projects using EC2, Lambda, S3, CloudWatch, and Terraform-based automation  | _Coming Soon_                                |
-| 🔷 `azure-projects/`      | Azure DevOps pipelines, ARM templates, AKS deployments                      | _Coming Soon_                                |
-| 🌐 `gcp-projects/`        | GCP projects including GKE, Cloud Run, IAM policies, and infrastructure     | _Coming Soon_                                |
-| 🛡️ `devsecops-projects/` | DevSecOps-focused projects: CI/CD security checks, IaC scans, policy-as-code| _Coming Soon_                                |
+| Folder Name              | Description                                                                 | Status / README Link                               |
+|--------------------------|-----------------------------------------------------------------------------|--------------------------------------------------|
+| 🐧 `bash-projects/`       | Bash automation scripts for system tasks, file sorting, and automation      | [View README »](./bash-projects/README.md)       |
+| 🐳 `DockerProjects/`      | Multi-stage builds, multi-arch images, app containerization, optimization   | [View README »](./DockerProjects/README.md)      |
+| ☸️ `kubernetes-projects/` | Kubernetes manifests, Helm charts, deployments, and service orchestration   | _Coming Soon_                                    |
+| ☁️ `aws-projects/`        | Projects using EC2, Lambda, S3, CloudWatch, and Terraform-based automation  | _Coming Soon_                                    |
+| 🔷 `azure-projects/`      | Azure DevOps pipelines, ARM templates, AKS deployments                      | _Coming Soon_                                    |
+| 🌐 `gcp-projects/`        | GCP projects including GKE, Cloud Run, IAM policies, and infrastructure     | _Coming Soon_                                    |
+| 🛡️ `devsecops-projects/` | DevSecOps-focused projects: CI/CD security checks, IaC scans, policy-as-code| [Harness Demo CI/CD »](./devsecops-projects/harness-demo-cicd/README.md) |
 
 ---
 
