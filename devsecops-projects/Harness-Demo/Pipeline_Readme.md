@@ -1,12 +1,22 @@
 # ⚙️ Harness Demo – CI/CD Pipeline
 
+[![Gitleaks](https://img.shields.io/badge/secrets%20scan-Gitleaks%20Enabled-brightgreen?logo=github&logoColor=white)](https://github.com/zricethezav/gitleaks)
+[![GitLab Repo](https://img.shields.io/badge/code-GitLab-blue?logo=gitlab)](https://gitlab.com/omermd529/harness-demo)
+
 A hands-on DevSecOps project showcasing a **CI/CD pipeline** built with **GitLab CI/CD**, **Docker**, and **AWS EC2**.  
 The pipeline automates testing, building, pushing to Docker Hub, and deploying a Flask app on an EC2 instance.
+
+A simple Flask web application that displays an animated rocket with the message "Get Ship Done" - perfect for demonstrating CI/CD pipelines with Harness.
 
 ---
 
 ## 📌 Project Overview
-- **App**: Simple Flask application (`app.py`) with a unit test (`test_app.py`)
+- **App**: Simple Flask application (`app.py`) with animated CSS rocket and "Get Ship Done" message
+- **Features**: 
+  - Flask web server serving a single-page application
+  - Animated CSS rocket animation
+  - Containerized with Docker
+  - Kubernetes deployment manifests included
 - **Pipeline**: `.gitlab-ci.yml` with 3 stages  
   - ✅ **Test** → Run Python unit tests with `unittest`  
   - 🐳 **Build** → Build Docker image & push to Docker Hub  
@@ -21,42 +31,83 @@ The pipeline automates testing, building, pushing to Docker Hub, and deploying a
 ```mermaid
 flowchart TD
     A[Code Commit] --> B[GitLab CI/CD]
-    B --> C[Test Stage: unittest]
-    C -->|Pass| D[Build Stage: Docker Build & Push]
-    D --> E[Deploy Stage: SSH into EC2]
-    E --> F[Run Container: harness-demo]
+    B --> C[Security Scan: Gitleaks]
+    C -->|No Secrets| D[Test Stage: unittest]
+    C -->|Secrets Found| G[Pipeline Fails]
+    D -->|Pass| E[Build Stage: Docker Build & Push]
+    E --> F[Deploy Stage: SSH into EC2]
+    F --> H[Run Container: harness-demo]
 ```
 
 ---
 
 ## 🔧 Tech Stack
-- **Languages**: Python (Flask)
-- **Containerization**: Docker
+- **Backend**: Flask 2.0.2
+- **Frontend**: HTML5, CSS3 animations
+- **Container**: Docker with Python 3.8 Alpine
+- **Orchestration**: Kubernetes
 - **CI/CD**: GitLab CI/CD
 - **Cloud**: AWS EC2 (Ubuntu)
 - **Registry**: Docker Hub
 - **Testing**: Python `unittest`
+- **Security**: Gitleaks for secret scanning
 
 ---
 
 ## 📂 Project Structure
 ```
-harness-demo-cicd/
-│── app.py               # Flask app
-│── test_app.py          # Unit test (unittest)
-│── Dockerfile           # Containerization
-│── requirements.txt     # Dependencies
-│── .gitlab-ci.yml       # CI/CD pipeline
-│── README.md            # Project documentation
+harness-demo/
+├── deploy/
+│   ├── app.py              # Flask application
+│   ├── requirements.txt    # Python dependencies
+│   ├── test_app.py        # Tests
+│   ├── static/
+│   │   └── style.css      # CSS animations
+│   └── templates/
+│       └── complete.html  # HTML template
+├── Dockerfile             # Container configuration
+├── manifest.yaml          # Kubernetes deployment
+├── .gitlab-ci.yml         # CI/CD pipeline
+└── README.md
 ```
 
 ---
 
 ## 🚀 Deployment Steps
+
+### CI/CD Pipeline
 1. **Push to GitLab** → Triggers CI/CD  
-2. **Test Stage** → Runs unit tests  
-3. **Build Stage** → Builds Docker image & pushes to Docker Hub  
-4. **Deploy Stage** → SSH into EC2 → stop old container → run new container  
+2. **Security Scan** → Gitleaks scans for secrets (pipeline fails if secrets detected)
+3. **Test Stage** → Runs unit tests  
+4. **Build Stage** → Builds Docker image & pushes to Docker Hub  
+5. **Deploy Stage** → SSH into EC2 → stop old container → run new container
+
+### Local Development
+1. Install dependencies:
+```bash
+cd deploy
+pip install -r requirements.txt
+```
+
+2. Run the application:
+```bash
+python app.py
+```
+
+3. Open http://localhost:5000 in your browser
+
+### Docker
+Build and run with Docker:
+```bash
+docker build -t harness-demo .
+docker run -p 5000:5000 harness-demo
+```
+
+### Kubernetes Deployment
+Deploy to Kubernetes cluster:
+```bash
+kubectl apply -f manifest.yaml
+```  
 
 ---
 
@@ -95,3 +146,10 @@ harness-demo-cicd/
 
 ## ✅ Status
 ✔️ Working end-to-end: commit → test → build → deploy to AWS EC2  
+🛡️ Secret scanning enabled: **Gitleaks** runs on every push; if any secret is detected, the **pipeline fails and blocks the merge**.
+
+---
+
+## 🔗 Source Code
+The complete **source code** and pipeline configuration are hosted on **GitLab**:  
+👉 [https://gitlab.com/omermd529/harness-demo](https://gitlab.com/omermd529/harness-demo)  
