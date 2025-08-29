@@ -1,4 +1,5 @@
 stages:
+  - security
   - test
   - build
   - deploy
@@ -6,12 +7,36 @@ stages:
 variables:
   IMAGE_NAME: omerdevsecops/devsecops-omerops
   IMAGE_TAG: harness-app-1.0
+  GITLEAKS_IMAGE: zricethezav/gitleaks:latest
+  GIT_DEPTH: 0                       # scan full history (recommended)
+
+git_leaks:
+  stage: security
+  image:
+    name: $GITLEAKS_IMAGE
+    entrypoint: [""]        # keep this if you added it earlier
+  variables:
+    GIT_DEPTH: 0            # scan full history (optional)
+  script:
+    - gitleaks version
+    - gitleaks detect --source . --redact --no-banner \
+        --report-format json --report-path gitleaks-report.json --exit-code 1
+  after_script:
+    # ensure artifact always exists to avoid "no matching files" warning
+    - test -f gitleaks-report.json || echo '{}' > gitleaks-report.json
+  artifacts:
+    when: always
+    paths:
+      - gitleaks-report.json
+
 
 run_tests:
   stage: test
   image: python:3.9-alpine
+  before_script:
+    - pip install --no-cache-dir flask
   script:
-    - echo "No tests in this app to run"
+    - python -m unittest discover -s deploy -p "test_*.py"
 
 build_image:
   stage: build
