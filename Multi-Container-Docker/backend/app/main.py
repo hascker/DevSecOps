@@ -11,7 +11,7 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 
 @app.get("/")
 def read_root():
-    return {"message": "FastAPI is running behind Nginx"}
+    return {"message": "FastAPI is running behind Nginx.This is a demo for multi container docker by Omer Mohammed DevSecOps"}
 
 @app.get("/db")
 def check_db():
