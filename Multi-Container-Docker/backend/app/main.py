@@ -4,12 +4,15 @@ import os
 import logging
 import socket
 
+
+
+app = FastAPI()
+
 @app.get("/whoami")
 def whoami():
     return {"container": socket.gethostname()}
 
-app = FastAPI()
-
+    
 # Basic logging (Phase 2 reliability)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
