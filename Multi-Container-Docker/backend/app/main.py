@@ -1,10 +1,10 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException,Request
 import psycopg2
 import os
 import logging
 import socket
-
-
+import json
+import uuid
 
 app = FastAPI()
 
@@ -12,10 +12,16 @@ app = FastAPI()
 def whoami():
     return {"container": socket.gethostname()}
 
-    
+
 # Basic logging (Phase 2 reliability)
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("app")
+logger.setLevel(logging.INFO)
+
+handler = logging.StreamHandler()
+formatter = logging.Formatter('%(message)s')
+handler.setFormatter(formatter)
+logger.handlers = [handler]
+
 
 DB_HOST = os.getenv("DB_HOST")
 DB_NAME = os.getenv("DB_NAME")
@@ -37,28 +43,45 @@ def get_db_connection():
 
 
 @app.get("/health")
-def health():
-    """
-    Healthcheck used by Docker.
-    App is healthy ONLY if DB is reachable.
-    """
+def health(request: Request):
     try:
         conn = get_db_connection()
         conn.close()
+        logger.info(json.dumps({
+            "level": "INFO",
+            "service": "backend",
+            "request_id": request.state.request_id,
+            "message": "Healthcheck passed"
+        }))
         return {"status": "healthy"}
     except Exception as e:
-        logger.error(f"Healthcheck failed: {e}")
+        logger.error(json.dumps({
+            "level": "ERROR",
+            "service": "backend",
+            "request_id": request.state.request_id,
+            "error": str(e)
+        }))
         raise HTTPException(status_code=503, detail="Database not ready")
 
+@app.middleware("http")
+async def request_id_middleware(request: Request, call_next):
+    request_id = request.headers.get("X-Request-ID", str(uuid.uuid4()))
+    request.state.request_id = request_id
+
+    response = await call_next(request)
+    response.headers["X-Request-ID"] = request_id
+
+    return response
 
 @app.get("/")
-def read_root():
-    return {
-        "message": (
-            "FastAPI running behind Nginx. "
-            "Multi-container Docker demo by Omer Mohammed (DevSecOps)."
-        )
-    }
+def read_root(request: Request):
+    logger.info(json.dumps({
+        "level": "INFO",
+        "service": "backend",
+        "request_id": request.state.request_id,
+        "message": "Root endpoint hit"
+    }))
+    return {"message": "FastAPI running behind Nginx,project by OmerMohammed DevSecOps"}
 
 
 @app.get("/db")
