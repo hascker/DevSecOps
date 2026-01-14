@@ -13,6 +13,7 @@ services:
       - "3000:3000"
     depends_on:
       - loki
+
   db:
     image: postgres:15
     environment:
@@ -31,10 +32,10 @@ services:
   backend:
     build: ./backend
     logging:
-    driver: loki
-    options:
-      loki-url: http://loki:3100/loki/api/v1/push
-      loki-external-labels: service=backend
+      driver: loki
+      options:
+        loki-url: http://loki:3100/loki/api/v1/push
+        loki-external-labels: service=backend
     environment:
       DB_HOST: db
       DB_NAME: appdb
@@ -59,10 +60,10 @@ services:
   nginx:
     image: nginx:latest
     logging:
-    driver: loki
-    options:
-      loki-url: http://loki:3100/loki/api/v1/push
-      loki-external-labels: service=nginx
+      driver: loki
+      options:
+        loki-url: http://loki:3100/loki/api/v1/push
+        loki-external-labels: service=nginx
     ports:
       - "80:80"
     volumes:
