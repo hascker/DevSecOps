@@ -18,4 +18,4 @@ jobs:
 
       - name: Build FastAPI Docker image
         run: |
-          docker build -t fastapi-backend ./backend
+          docker build -t fastapi-backend ./Multi-Container-Docker/backend
