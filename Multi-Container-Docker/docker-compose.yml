@@ -27,15 +27,14 @@ services:
   # Promtail (Log shipper)
   # ------------------------
   promtail:
-  image: grafana/promtail:2.9.3
-  volumes:
-    - /run/docker.sock:/run/docker.sock
-    - ./promtail/promtail-config.yml:/etc/promtail/promtail.yml
-  command: -config.file=/etc/promtail/promtail.yml
-  depends_on:
-    - loki
-  restart: unless-stopped
-    
+    image: grafana/promtail:2.9.3
+    volumes:
+      - /run/docker.sock:/run/docker.sock
+      - ./promtail/promtail-config.yml:/etc/promtail/promtail.yml
+    command: -config.file=/etc/promtail/promtail.yml
+    depends_on:
+      - loki
+    restart: unless-stopped
 
   # ------------------------
   # PostgreSQL
