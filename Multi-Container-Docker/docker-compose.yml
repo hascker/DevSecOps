@@ -29,7 +29,7 @@ services:
   promtail:
     image: grafana/promtail:2.9.3
     volumes:
-      - /run/docker.sock:/run/docker.sock
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - ./promtail/promtail-config.yml:/etc/promtail/promtail.yml
     command: -config.file=/etc/promtail/promtail.yml
     depends_on:
