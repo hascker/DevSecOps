@@ -30,3 +30,12 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/fastapi-backend:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/fastapi-backend:${{ github.sha }}
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/fastapi-backend:latest
+          format: table
+          exit-code: 1
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
