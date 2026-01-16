@@ -88,7 +88,7 @@ Multi-Container-Docker/
 ---
 
 ## How to Run
-
+You need t have Docker installed on your machine.
 ```bash
 docker compose down -v --remove-orphans
 docker compose up --build
