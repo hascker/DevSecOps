@@ -1,1 +1,5 @@
 GHSA-58pv-8j8x-9vj2
+# Debian glibc CVE – no fix available yet
+CVE-2026-0861
+# Suppressed because no upstream fix available as of Jan 2026.
+# Image is rebuilt automatically once Debian releases patched glibc.
