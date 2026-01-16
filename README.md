@@ -42,15 +42,7 @@ OmerOps/
 
 ---
 
-## 🚧 In Progress  
 
-| Project | Category | Description | Status |
-|---------|----------|-------------|--------|
-| [Python CloudWatch Analyzer](./Automation-Scripting/Python-CloudWatch-Analyzer) | Automation | Python tool integrating **CloudWatch + GuardDuty** for anomaly detection & reporting automation. | 🚧 In Progress |
-| [Ansible Compliance Hardening](./IaC-Cloud-Infrastructure/Ansible-Compliance-Hardening) | IaC | Playbooks to enforce **CIS benchmarks**, automate patching, and improve compliance posture. | 🚧 In Progress |
-| [K8s Secure Pipeline](./DevSecOps-Projects/K8s-Secure-Pipeline) | DevSecOps | GitLab CI/CD with **SAST, Trivy, Gitleaks** for end-to-end secure delivery. | 🚧 In Progress |
-| [Terraform EKS Cluster](./IaC-Cloud-Infrastructure/Terraform-EKS-Cluster) | IaC | Hardened **EKS cluster** with Terraform, RBAC, network policies, and pod security standards. | 🚧 In Progress |
-| [Azure App CI/CD with Trivy](./DevSecOps-Projects/Azure-App-CI-CD-with-Trivy) | DevSecOps | Azure DevOps pipeline with Trivy security scanning for containerized applications. | 🚧 In Progress |
 
 ---
 
