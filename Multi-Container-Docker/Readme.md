@@ -8,7 +8,7 @@ The focus is on **real-world DevSecOps practices**, not just running containers 
 
 ## 🧱 Architecture Overview
 
-High-level request flow:
+High-level request flow :
 
 ```
 
