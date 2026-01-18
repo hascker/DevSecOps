@@ -1,80 +1,72 @@
-# Multi-Container Docker Application with Observability
+---
 
-## Overview
+```md
+# 🚀 Production-Style Multi-Container DevSecOps Project
 
-This project demonstrates a **production-style, multi-container application** built using **Docker Compose**, following DevOps and SRE best practices. It goes beyond simply running containers and focuses on **security, reliability, scalability, and observability**.
+This project demonstrates a **production-style containerized application** built using **Docker, FastAPI, Nginx, PostgreSQL**, with **observability, security scanning, CI/CD, and cloud deployment** on AWS EC2.
 
-The stack includes:
-
-* **FastAPI** – Backend application
-* **PostgreSQL** – Persistent relational database
-* **Nginx** – Reverse proxy and single entry point
-* **Loki** – Centralized log storage
-* **Promtail** – Log shipper
-* **Grafana** – Log visualization and exploration
+The focus is on **real-world DevSecOps practices**, not just running containers locally.
 
 ---
 
-## Architecture
-![alt text](MultiDockerArch.png)
-Client
-→ Nginx (Port 80)
-→ FastAPI (internal Docker network)
-→ PostgreSQL (internal Docker network)
+## 🧱 Architecture Overview
 
-Logs Flow:
-Containers → Promtail → Loki → Grafana
-
----
-
-## Key Features
-
-### 1. Multi-Container Architecture
-
-* Each component runs in its own container
-* Services communicate using Docker’s internal DNS
-* Only Nginx is exposed to the host
-
-### 2. Secure & Efficient Containers
-
-* Multi-stage Dockerfile for FastAPI
-* Non-root user inside application container
-* Minimal runtime image size
-
-### 3. Reliability & Self-Healing
-
-* Health checks for PostgreSQL and FastAPI
-* Dependency-based startup (`depends_on` with health conditions)
-* Automatic restarts using `restart: unless-stopped`
-
-### 4. Reverse Proxy
-
-* Nginx acts as the single entry point
-* Backend is never exposed directly
-
-### 5. Centralized Logging (Observability)
-
-* Structured JSON logs from FastAPI
-* Promtail tails Docker container log files
-* Loki stores logs centrally
-* Grafana used to query and correlate logs
-
-### 6. Log Correlation
-
-* Request ID propagated through the application
-* Enables tracing a request across services
-
----
-
-## Project Structure
+High-level request flow:
 
 ```
+
+Client
+|
+v
+Nginx (Reverse Proxy / Load Balancer)
+|
+v
+FastAPI Backend (Docker containers)
+|
+v
+PostgreSQL Database
+
+```
+
+Observability and CI/CD run alongside the application:
+
+- Logs → Promtail → Loki → Grafana
+- CI → GitHub Actions
+- Security → Trivy
+- CD → AWS EC2 (SSH-based deployment)
+
+---
+![alt text](ArchDiagram.png)
+## 🧩 Tech Stack
+
+### Application
+- **FastAPI** – Backend API
+- **PostgreSQL 15** – Database
+- **Nginx** – Reverse proxy & load balancing
+- **Docker & Docker Compose**
+
+### Observability
+- **Grafana** – Log visualization
+- **Loki** – Log storage
+- **Promtail** – Log shipper
+
+### DevSecOps
+- **GitHub Actions** – CI/CD
+- **Trivy** – Container vulnerability scanning
+- **AWS EC2** – Deployment target
+
+---
+
+## 📁 Repository Structure
+
+```
+
 Multi-Container-Docker/
 ├── backend/
+│   ├── app/
+│   │   └── main.py
 │   ├── Dockerfile
-│   ├── requirements.txt
-│   └── app/
-│       └── main.py
+│   └── requirements.txt
 ├── nginx/
 │   └── nginx.conf
 ├── loki/
@@ -82,61 +74,143 @@ Multi-Container-Docker/
 ├── promtail/
 │   └── promtail-config.yml
 ├── docker-compose.yml
-└── README.md
+├── Readme.md
+└── MultiDockerArch.png
+
 ```
 
 ---
 
-## How to Run
-You need to have Docker installed on your machine.
-```bash
-docker compose down -v --remove-orphans
-docker compose up --build
+## 🔐 Security Practices Implemented
+
+- Multi-stage Docker builds
+- Non-root user in application container
+- Dependency vulnerability scanning with **Trivy**
+- CI pipeline fails on **HIGH / CRITICAL vulnerabilities**
+- Secrets stored in **GitHub Secrets**
+- No credentials committed to the repository
+
+---
+
+## 📊 Observability (Centralized Logging)
+
+### Logging Flow
+
 ```
 
-Services:
+Container Logs
+↓
+Promtail
+↓
+Loki
+↓
+Grafana
 
-* App: [http://localhost](http://localhost)
-* Grafana: [http://localhost:3000](http://localhost:3000)
+```
+
+### What’s implemented
+
+- Structured JSON logs from FastAPI
+- Nginx access logs
+- Centralized log aggregation
+- Request-level traceability using request IDs
+- Grafana UI for querying logs
+
+### Access (EC2 Deployment)
+
+- **Application:** `http://<EC2_PUBLIC_IP>`
+- **Grafana:** `http://<EC2_PUBLIC_IP>:3000`
 
 ---
 
-## Grafana Usage
+## ⚙️ CI Pipeline (GitHub Actions)
 
-1. Login to Grafana (`admin / admin`)
-2. Add Loki as a data source (`http://loki:3100`)
-3. Explore logs using LogQL:
+### CI Responsibilities
 
-```logql
-{job="docker"}
+1. Checkout repository
+2. Build FastAPI Docker image
+3. Push image to Docker Hub
+4. Scan image using **Trivy**
+5. Fail pipeline if HIGH / CRITICAL vulnerabilities are found
+
+This ensures **only secure images progress forward**.
+
+---
+
+## 🚀 CD Pipeline (Deploy to AWS EC2)
+
+### Deployment Model
+
+- Single EC2 instance
+- Docker Compose used on the VM
+- GitHub Actions connects via SSH
+
+### Deployment Flow
+
+```
+
+GitHub Push
+↓
+GitHub Actions
+↓
+SSH into EC2
+↓
+git pull
+docker compose pull
+docker compose up -d
+
+```
+
+### Result
+
+- Containers are updated automatically
+- Existing containers are recreated only if needed
+- No manual SSH required after setup
+
+---
+
+## ☁️ Cloud Deployment Details
+
+- **Cloud Provider:** AWS
+- **Compute:** EC2 (Amazon Linux)
+- **Deployment Tool:** Docker Compose
+- **Access:** SSH + Security Groups
+
+A single EC2 instance is intentionally used to:
+- Keep architecture simple
+- Focus on DevSecOps fundamentals
+- Prepare for Kubernetes migration later
+
+---
+
+## 🧠 Key Learnings
+
+- Docker internal DNS and service discovery
+- Load balancing without hardcoded IPs
+- Centralized logging with zero app coupling
+- CI security gates using Trivy
+- Real GitHub Actions → EC2 deployment
+- Debugging real CI/CD failures (SSH, secrets, permissions)
+
+---
+
+## 🔜 Future Enhancements
+
+- Metrics with **Prometheus**
+- Alerting with **Alertmanager**
+- Zero-downtime deployments
+- CI status badge
+- Terraform-based EC2 provisioning
+- Kubernetes migration (optional)
+
+---
+
+## 👨‍💻 Author
+
+**Mohammed Omer**  
+DevOps / Cloud Engineer  
+Focused on Docker, CI/CD, Security, and Cloud-native systems
 ```
 
 ---
 
-## What This Project Demonstrates
-
-* Real-world Docker Compose usage
-* Production-style container hardening
-* Service health management
-* Centralized logging and observability
-* Debugging and resolving real infrastructure issues
-
----
-
-## Future Enhancements
-
-* GitHub Actions CI/CD pipeline
-* Prometheus metrics and dashboards
-* Security scanning (Trivy, SBOM)
-* Rate limiting and TLS at Nginx
-
----
-
-## Author
-
-**Mohammed Omer**
-DevOps / Cloud Engineer
-
----
-
-This project is intended as a learning-focused but production-aligned reference for modern DevOps practices.
