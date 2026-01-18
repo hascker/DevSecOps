@@ -1,4 +1,4 @@
-name: CD - Deploy to EC2 (Self-hosted)
+name: CD - Deploy to EC2
 
 on:
   push:
@@ -7,21 +7,26 @@ on:
 
 jobs:
   deploy:
+    name: Deploy Docker Compose to EC2
     runs-on: [self-hosted]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Go to project directory
+      - name: Show workspace (debug)
         run: |
-          cd OmerOps/Multi-Container-Docker
+          echo "Workspace path:"
           pwd
+          echo "Repo contents:"
           ls -la
 
-      - name: Pull latest code & deploy
+      - name: Deploy containers using Docker Compose
         run: |
-          cd OmerOps/Multi-Container-Docker
-          git pull origin main
+          cd Multi-Container-Docker
           docker compose pull
-          docker compose up -d --remove-orphans
+          docker compose up -d
+
+      - name: Verify running containers
+        run: |
+          docker ps
