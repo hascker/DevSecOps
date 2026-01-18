@@ -12,7 +12,7 @@ High-level request flow:
 
 ```
 
-            Client
+        Client
             |
             v
 Nginx (Reverse Proxy / Load Balancer)
