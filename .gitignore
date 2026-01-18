@@ -36,6 +36,9 @@ docker-compose.override.yml
 __pycache__/
 *.py[cod]
 *$py.class
+venv/
+.venv/
+env/
 
 # === Node (if you add any JS/TS) ===
 node_modules/
