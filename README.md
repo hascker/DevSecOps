@@ -47,7 +47,7 @@ Every project in this repository follows a **Security-by-Design** approach:
 ## 📌 About
 This portfolio reflects my journey in engineering resilient cloud infrastructure. It aligns with my professional focus on AWS and DevSecOps best practices.
 
-* **LinkedIn:** [Your LinkedIn Profile Link]
+* **LinkedIn:** linkedin.com/in/mdomer529
 * **Status:** Actively maintaining and adding modular Terraform/IaC components.
 
 ---
