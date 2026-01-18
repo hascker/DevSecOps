@@ -12,15 +12,15 @@ High-level request flow:
 
 ```
 
-Client
-|
-v
+            Client
+            |
+            v
 Nginx (Reverse Proxy / Load Balancer)
-|
-v
+            |
+            v
 FastAPI Backend (Docker containers)
-|
-v
+            |
+            v
 PostgreSQL Database
 
 ```
