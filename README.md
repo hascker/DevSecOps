@@ -56,3 +56,4 @@ This portfolio reflects my journey in engineering resilient cloud infrastructure
 - ✅ Optimized Multi-Container image sizes.
 - ✅ Integrated Gitleaks into local pre-commit hooks.
 - ✅ Documented production-ready deployment to EC2.
+
