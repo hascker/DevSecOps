@@ -207,4 +207,3 @@ A single EC2 instance is intentionally used to:
 **Mohammed Omer**  
 DevOps / Cloud Engineer  
 Focused on Docker, CI/CD, Security, and Cloud-native systems
-
