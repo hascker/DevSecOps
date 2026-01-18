@@ -1,6 +1,3 @@
----
-
-```md
 # 🚀 Production-Style Multi-Container DevSecOps Project
 
 This project demonstrates a **production-style containerized application** built using **Docker, FastAPI, Nginx, PostgreSQL**, with **observability, security scanning, CI/CD, and cloud deployment** on AWS EC2.
@@ -210,7 +207,4 @@ A single EC2 instance is intentionally used to:
 **Mohammed Omer**  
 DevOps / Cloud Engineer  
 Focused on Docker, CI/CD, Security, and Cloud-native systems
-```
-
----
 
