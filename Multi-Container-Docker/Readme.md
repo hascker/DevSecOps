@@ -33,7 +33,7 @@ Observability and CI/CD run alongside the application:
 - CD → AWS EC2 (SSH-based deployment)
 
 ---
-![alt text](ArchDiagram.png)
+![alt text](ArchImage.png)
 ## 🧩 Tech Stack
 
 ### Application
