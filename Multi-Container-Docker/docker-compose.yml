@@ -80,6 +80,17 @@ services:
       retries: 3
     restart: unless-stopped
 
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
   # ------------------------
   # Nginx (Reverse Proxy)
   # ------------------------
