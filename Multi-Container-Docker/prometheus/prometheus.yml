@@ -5,4 +5,4 @@ scrape_configs:
   - job_name: "fastapi"
     static_configs:
       - targets:
-          - backend:8000
+          - nginx:80
