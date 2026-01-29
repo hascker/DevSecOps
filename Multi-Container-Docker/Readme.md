@@ -1,209 +1,138 @@
 # 🚀 Production-Style Multi-Container DevSecOps Project
 
-This project demonstrates a **production-style containerized application** built using **Docker, FastAPI, Nginx, PostgreSQL**, with **observability, security scanning, CI/CD, and cloud deployment** on AWS EC2.
+This project demonstrates a **production-style containerized backend platform** built using **FastAPI, Docker, Nginx, PostgreSQL**, with **security scanning, observability, CI/CD, alerting, and cloud deployment** on AWS EC2.
 
-The focus is on **real-world DevSecOps practices**, not just running containers locally.
+The goal is to showcase **real-world DevSecOps and SRE practices**, not just running containers locally.
 
 ---
 
 ## 🧱 Architecture Overview
 
-High-level request flow :
+### Application Request Flow
 
-```
+Client → Nginx → FastAPI → PostgreSQL
 
-        Client
-            |
-            v
-Nginx (Reverse Proxy / Load Balancer)
-            |
-            v
-FastAPI Backend (Docker containers)
-            |
-            v
-PostgreSQL Database
+### Observability & CI/CD (Parallel)
 
-```
-
-Observability and CI/CD run alongside the application:
-
-- Logs → Promtail → Loki → Grafana
-- CI → GitHub Actions
-- Security → Trivy
-- CD → AWS EC2 (SSH-based deployment)
+Logs → Promtail → Loki → Grafana  
+Metrics → Prometheus → Grafana  
+CI → GitHub Actions  
+CD → Self-hosted GitHub Runner (EC2)  
+Security → Trivy  
 
 ---
-![alt text](ArchImage.png)
+
+## 🖼️ Architecture Diagram
+
+Multi-Container-Docker/ArchImage.png
+
+---
+
 ## 🧩 Tech Stack
 
-### Application
-- **FastAPI** – Backend API
-- **PostgreSQL 15** – Database
-- **Nginx** – Reverse proxy & load balancing
-- **Docker & Docker Compose**
+### Application Layer
+- FastAPI
+- PostgreSQL 15
+- Nginx
+- Docker & Docker Compose
 
 ### Observability
-- **Grafana** – Log visualization
-- **Loki** – Log storage
-- **Promtail** – Log shipper
+- Prometheus
+- Grafana
+- Loki
+- Promtail
 
 ### DevSecOps
-- **GitHub Actions** – CI/CD
-- **Trivy** – Container vulnerability scanning
-- **AWS EC2** – Deployment target
+- GitHub Actions (CI/CD)
+- Trivy (Security scanning)
+- Self-hosted GitHub Runner
+- AWS EC2 (Amazon Linux)
 
 ---
 
-## 📁 Repository Structure
-
-```
-
-Multi-Container-Docker/
-├── backend/
-│   ├── app/
-│   │   └── main.py
-│   ├── Dockerfile
-│   └── requirements.txt
-├── nginx/
-│   └── nginx.conf
-├── loki/
-│   └── loki-config.yml
-├── promtail/
-│   └── promtail-config.yml
-├── docker-compose.yml
-├── Readme.md
-└── MultiDockerArch.png
-
-```
-
----
-
-## 🔐 Security Practices Implemented
+## 🔐 Security Practices
 
 - Multi-stage Docker builds
-- Non-root user in application container
-- Dependency vulnerability scanning with **Trivy**
-- CI pipeline fails on **HIGH / CRITICAL vulnerabilities**
-- Secrets stored in **GitHub Secrets**
-- No credentials committed to the repository
+- Non-root containers
+- Trivy vulnerability scanning
+- CI fails on HIGH / CRITICAL findings
+- Secrets stored in GitHub Secrets
 
 ---
 
-## 📊 Observability (Centralized Logging)
+## 📊 Observability
 
-### Logging Flow
+### Logging
+Container Logs → Promtail → Loki → Grafana
 
-```
-
-Container Logs
-↓
-Promtail
-↓
-Loki
-↓
-Grafana
-
-```
-
-### What’s implemented
-
-- Structured JSON logs from FastAPI
-- Nginx access logs
-- Centralized log aggregation
-- Request-level traceability using request IDs
-- Grafana UI for querying logs
-
-### Access (EC2 Deployment)
-
-- **Application:** `http://<EC2_PUBLIC_IP>`
-- **Grafana:** `http://<EC2_PUBLIC_IP>:3000`
+### Metrics
+FastAPI exposes /metrics  
+Prometheus scrapes backend:8000/metrics
 
 ---
 
-## ⚙️ CI Pipeline (GitHub Actions)
+## 📈 Grafana Dashboards
 
-### CI Responsibilities
-
-1. Checkout repository
-2. Build FastAPI Docker image
-3. Push image to Docker Hub
-4. Scan image using **Trivy**
-5. Fail pipeline if HIGH / CRITICAL vulnerabilities are found
-
-This ensures **only secure images progress forward**.
+- Request rate
+- Error rate (4xx / 5xx)
+- Latency (P50 / P95 / P99)
+- Service availability
 
 ---
 
-## 🚀 CD Pipeline (Deploy to AWS EC2)
+## 🚨 Alerts (Grafana)
 
-### Deployment Model
+### Service Down
+- up{job="fastapi"} == 0
+- Pending: 5 minutes
 
-- Single EC2 instance
-- Docker Compose used on the VM
-- GitHub Actions connects via SSH
-
-### Deployment Flow
-
-```
-
-GitHub Push
-↓
-GitHub Actions
-↓
-SSH into EC2
-↓
-git pull
-docker compose pull
-docker compose up -d
-
-```
-
-### Result
-
-- Containers are updated automatically
-- Existing containers are recreated only if needed
-- No manual SSH required after setup
+### High Error Rate
+- 5xx error rate over rolling window
 
 ---
 
-## ☁️ Cloud Deployment Details
+## ⚙️ CI Pipeline
 
-- **Cloud Provider:** AWS
-- **Compute:** EC2 (Amazon Linux)
-- **Deployment Tool:** Docker Compose
-- **Access:** SSH + Security Groups
+1. Build Docker image
+2. Push to Docker Hub
+3. Scan with Trivy
+4. Fail on vulnerabilities
 
-A single EC2 instance is intentionally used to:
-- Keep architecture simple
-- Focus on DevSecOps fundamentals
-- Prepare for Kubernetes migration later
+---
+
+## 🚀 CD Pipeline
+
+GitHub → Self-hosted runner → docker compose pull → docker compose up -d
+
+---
+
+## ☁️ Cloud Deployment
+
+- AWS EC2
+- Amazon Linux 2023
+- Docker Compose runtime
 
 ---
 
 ## 🧠 Key Learnings
 
-- Docker internal DNS and service discovery
-- Load balancing without hardcoded IPs
-- Centralized logging with zero app coupling
-- CI security gates using Trivy
-- Real GitHub Actions → EC2 deployment
-- Debugging real CI/CD failures (SSH, secrets, permissions)
+- Production-grade Docker networking
+- Centralized logs & metrics
+- CI security gates
+- Self-hosted GitHub runners
+- Grafana alerting (SLO-based)
 
 ---
 
 ## 🔜 Future Enhancements
 
-- Metrics with **Prometheus**
-- Alerting with **Alertmanager**
-- Zero-downtime deployments
-- CI status badge
-- Terraform-based EC2 provisioning
-- Kubernetes migration (optional)
+- Alertmanager
+- Terraform
+- Kubernetes (EKS)
 
 ---
 
 ## 👨‍💻 Author
 
-**Mohammed Omer**  
-DevOps / Cloud Engineer  
-Focused on Docker, CI/CD, Security, and Cloud-native systems
+Mohammed Omer  
+DevOps / Cloud Engineer
