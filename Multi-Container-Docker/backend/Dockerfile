@@ -9,31 +9,28 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /install
 
-# 🔐 Patch OS packages + install build deps
-RUN apt-get update \
- && apt-get upgrade -y \
- && apt-get install -y --no-install-recommends \
+# System dependencies needed only for building wheels
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy and install dependencies
+# Copy dependency list
 COPY requirements.txt .
+
+# Install dependencies cleanly and force correct versions
 RUN pip install --upgrade pip \
- && pip install --prefix=/install -r requirements.txt
+    && pip install \
+        --no-cache-dir \
+        --upgrade \
+        --force-reinstall \
+        -r requirements.txt
 
 
 ############################
 # Stage 2: Runtime
 ############################
 FROM python:3.11-slim
-
-# 🔐 Patch OS packages in runtime image
-RUN apt-get update \
- && apt-get upgrade -y \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
 RUN useradd --create-home appuser
