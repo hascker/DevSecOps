@@ -123,7 +123,14 @@ GitHub → Self-hosted runner → docker compose pull → docker compose up -d
 - Grafana alerting (SLO-based)
 
 ---
+### Vulnerability Management
 
+- Application and dependency vulnerabilities are remediated proactively.
+- OS-level vulnerabilities originating from base images (e.g., Debian/OpenSSL)
+  are monitored and accepted until upstream patches are released.
+- CI pipelines enforce security gates using Trivy for HIGH and CRITICAL findings.
+
+---
 ## 🔜 Future Enhancements
 
 - Alertmanager
