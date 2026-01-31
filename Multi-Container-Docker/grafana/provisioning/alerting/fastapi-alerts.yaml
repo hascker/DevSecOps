@@ -9,15 +9,18 @@ groups:
       - uid: fastapi-down
         title: FastAPI Service Down
         condition: C
+        for: 5m
         data:
           - refId: A
             datasourceUid: prometheus
             model:
               expr: up{job="fastapi"}
+
           - refId: B
             model:
               type: reduce
               reducer: last
+
           - refId: C
             model:
               type: threshold
@@ -25,16 +28,17 @@ groups:
                 - evaluator:
                     type: lt
                     params: [1]
-                  for: 5m
+
         labels:
           severity: critical
         annotations:
           summary: FastAPI is down
-          description: FastAPI has been unreachable for 5 minutes.
+          description: FastAPI has been unreachable for more than 5 minutes.
 
       - uid: fastapi-5xx
         title: High 5xx Error Rate
         condition: C
+        for: 3m
         data:
           - refId: A
             datasourceUid: prometheus
@@ -42,10 +46,12 @@ groups:
               expr: |
                 (sum(rate(http_requests_total{status=~"5.."}[5m])) /
                  sum(rate(http_requests_total[5m]))) * 100
+
           - refId: B
             model:
               type: reduce
               reducer: last
+
           - refId: C
             model:
               type: threshold
@@ -53,6 +59,6 @@ groups:
                 - evaluator:
                     type: gt
                     params: [2]
-                  for: 3m
+
         labels:
           severity: warning
