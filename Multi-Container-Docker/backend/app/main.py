@@ -160,10 +160,12 @@ def check_db():
         logger.error(f"Database query failed: {e}")
         raise HTTPException(status_code=500, detail="Database error")
 
+@app.get("/test-500")
+def test_500():
+    raise HTTPException(status_code=500, detail="Intentional 500 error for alert testing")
+
 @app.get("/metrics")
 def metrics():
     return Response(generate_latest(), media_type="text/plain")
 
-@app.get("/test-500")
-def test_500():
-    raise HTTPException(status_code=500, detail="Intentional 500 error for alert testing")
+
