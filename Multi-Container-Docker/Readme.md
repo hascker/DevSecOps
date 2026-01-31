@@ -7,7 +7,7 @@ The goal is to showcase **real-world DevSecOps and SRE practices**, not just run
 ---
 
 ## 🧱 Architecture Overview
-
+![alt text](devsecops-architecture.png)
 ### Application Request Flow
 
 Client → Nginx → FastAPI → PostgreSQL
