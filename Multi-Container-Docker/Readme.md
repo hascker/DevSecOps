@@ -1,30 +1,32 @@
 # 🚀 Production-Style Multi-Container DevSecOps Project
 
-This project demonstrates a **production-style containerized backend platform** built using **FastAPI, Docker, Nginx, PostgreSQL**, with **security scanning, observability, CI/CD, alerting, and cloud deployment** on AWS EC2.
+This project demonstrates a **production-style containerized backend platform** built using **FastAPI, Docker, Nginx, PostgreSQL**, with **security scanning, observability, CI/CD, alerting, and cloud deployment on AWS EC2**.
 
-The goal is to showcase **real-world DevSecOps and SRE practices**, not just running containers locally.
+The goal is to showcase real-world **DevSecOps, SRE, and GitOps practices**, including observability-as-code, security gates, and production-style deployment workflows — not just running containers locally.
 
 ---
 
 ## 🧱 Architecture Overview
-![alt text](devsecops-architecture.png)
+
 ### Application Request Flow
-
+```
 Client → Nginx → FastAPI → PostgreSQL
+```
 
-### Observability & CI/CD (Parallel)
-
-Logs → Promtail → Loki → Grafana  
-Metrics → Prometheus → Grafana  
-CI → GitHub Actions  
-CD → Self-hosted GitHub Runner (EC2)  
-Security → Trivy  
+### Observability & CI/CD Flow
+```
+Logs     → Promtail → Loki → Grafana
+Metrics  → Prometheus → Grafana
+CI       → GitHub Actions
+CD       → Self-hosted GitHub Runner (EC2)
+Security → Trivy
+```
 
 ---
 
 ## 🖼️ Architecture Diagram
-
-
+![alt text](devsecops-architecture.png)
+Refer to the architecture diagram available in the repository.
 
 ---
 
@@ -37,109 +39,154 @@ Security → Trivy
 - Docker & Docker Compose
 
 ### Observability
-- Prometheus
-- Grafana
-- Loki
-- Promtail
+- Prometheus (metrics scraping)
+- Grafana (dashboards & alerting)
+- Loki (log aggregation)
+- Promtail (log shipping)
 
 ### DevSecOps
 - GitHub Actions (CI/CD)
-- Trivy (Security scanning)
+- Trivy (container security scanning)
 - Self-hosted GitHub Runner
-- AWS EC2 (Amazon Linux)
+
+### Cloud & Runtime
+- AWS EC2 (Amazon Linux 2023)
+- Docker Compose runtime
 
 ---
 
 ## 🔐 Security Practices
 
-- Multi-stage Docker builds
-- Non-root containers
-- Trivy vulnerability scanning
-- CI fails on HIGH / CRITICAL findings
-- Secrets stored in GitHub Secrets
+- Multi-stage Docker builds to reduce image size
+- Containers run as **non-root users**
+- Trivy vulnerability scanning integrated into CI
+- CI pipeline fails on **HIGH / CRITICAL** vulnerabilities
+- Secrets stored securely using **GitHub Secrets**
+- Reduced attack surface by limiting publicly exposed ports
 
 ---
 
 ## 📊 Observability
 
 ### Logging
+```
 Container Logs → Promtail → Loki → Grafana
+```
+
+- Centralized, structured logging
+- Logs searchable and queryable via Grafana Loki
 
 ### Metrics
-FastAPI exposes /metrics  
-Prometheus scrapes backend:8000/metrics
+```
+FastAPI → /metrics → Prometheus → Grafana
+```
+
+- FastAPI exposes Prometheus-compatible metrics
+- Prometheus scrapes `backend:8000/metrics`
+- Grafana dashboards and alert rules are **provisioned as code** using JSON and YAML, following a GitOps approach
 
 ---
 
 ## 📈 Grafana Dashboards
 
+Dashboards are provisioned automatically at startup.
+
+Tracked KPIs:
 - Request rate
 - Error rate (4xx / 5xx)
 - Latency (P50 / P95 / P99)
-- Service availability
+- Service availability (UP/DOWN using Prometheus `up` metric)
+
+> Latency metrics are visualized for analysis, while alerting thresholds are intentionally kept minimal to reduce noise.
 
 ---
 
-## 🚨 Alerts (Grafana)
+## 🚨 Alerts (Grafana – Provisioned as Code)
 
-### Service Down
-- up{job="fastapi"} == 0
-- Pending: 5 minutes
+Alerts are defined declaratively using YAML and loaded at Grafana startup.
 
-### High Error Rate
-- 5xx error rate over rolling window
+### Implemented Alerts
+
+#### Service Down
+- **Query:** `up{job="fastapi"} == 0`
+- **Pending:** 5 minutes
+- **Severity:** Critical
+
+#### High Error Rate
+- 5xx error rate over a rolling window
+- **Severity:** Warning
+
+> Latency-based alerts were evaluated and intentionally removed to avoid false positives.  
+> The alerting strategy focuses on availability and error rates, aligned with practical SRE principles.
 
 ---
 
-## ⚙️ CI Pipeline
+## ⚙️ CI Pipeline (GitHub Actions)
 
-1. Build Docker image
-2. Push to Docker Hub
-3. Scan with Trivy
-4. Fail on vulnerabilities
+1. Checkout repository
+2. Build Docker image
+3. Push image to Docker Hub
+4. Scan image using Trivy
+5. Fail pipeline on HIGH / CRITICAL vulnerabilities
 
 ---
 
 ## 🚀 CD Pipeline
 
-GitHub → Self-hosted runner → docker compose pull → docker compose up -d
+```
+GitHub → Self-hosted Runner (EC2)
+       → docker compose pull
+       → docker compose up -d
+```
+
+- No manual intervention required
+- Infrastructure treated as immutable
+- Observability components (dashboards & alerts) are provisioned automatically
+
+A self-hosted GitHub runner is used to maintain control over deployments and avoid exposing production credentials to shared runners.
 
 ---
 
 ## ☁️ Cloud Deployment
 
-- AWS EC2
-- Amazon Linux 2023
-- Docker Compose runtime
+- AWS EC2 running Amazon Linux 2023
+- Docker Compose used as the runtime orchestrator
+- Prometheus is bound to localhost and not exposed publicly, reducing the external attack surface
+- Grafana exposed securely for visualization and alerting
 
 ---
 
 ## 🧠 Key Learnings
 
-- Production-grade Docker networking
-- Centralized logs & metrics
-- CI security gates
-- Self-hosted GitHub runners
-- Grafana alerting (SLO-based)
-
----
-### Vulnerability Management
-
-- Application and dependency vulnerabilities are remediated proactively.
-- OS-level vulnerabilities originating from base images (e.g., Debian/OpenSSL)
-  are monitored and accepted until upstream patches are released.
-- CI pipelines enforce security gates using Trivy for HIGH and CRITICAL findings.
-
----
-## 🔜 Future Enhancements
-
-- Alertmanager
-- Terraform
-- Kubernetes (EKS)
+- Production-grade Docker networking and service isolation
+- Centralized logging and metrics using the Grafana stack
+- CI security gates with Trivy
+- Self-hosted GitHub runners for controlled deployments
+- Grafana provisioning behavior (UID-based, non-destructive updates)
+- Treating observability state as disposable and fully reproducible from code
 
 ---
 
-## 👨‍💻 Author
+## 🔍 Vulnerability Management
 
-Mohammed Omer  
-DevOps / Cloud Engineer
+- Application and dependency vulnerabilities are remediated proactively
+- OS-level vulnerabilities from base images (e.g., Debian / OpenSSL) are monitored
+- Risks are accepted until upstream patches are released
+- CI enforces security gates for HIGH / CRITICAL findings
+
+---
+
+## 📌 Why This Project Is Production-Oriented
+
+This project intentionally prioritizes correctness, security, and maintainability over feature count.  
+Design decisions such as GitOps-based observability, minimal alerting, reduced port exposure, and disposable Grafana state reflect real-world production trade-offs.
+
+---
+
+## 🎯 Project Goal
+
+This project is designed to:
+- Demonstrate real DevSecOps and SRE workflows
+- Reflect production-level decision-making
+- Be interview-ready for DevOps / SRE roles
+- Follow GitOps and security-first principles
