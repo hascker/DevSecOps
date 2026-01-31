@@ -1,14 +1,17 @@
 {
-  "uid": "fastapi-sre",
-  "title": "FastAPI – SRE Overview",
+  "uid": "fastapi-observability",
+  "title": "FastAPI Observability Dashboard",
   "schemaVersion": 38,
   "version": 1,
   "refresh": "10s",
-  "tags": ["fastapi", "sre", "devsecops"],
+  "tags": ["fastapi", "devops", "sre", "observability"],
+  "timezone": "browser",
   "panels": [
     {
+      "id": 1,
       "type": "timeseries",
-      "title": "Request Rate",
+      "title": "Request Rate (RPS)",
+      "datasource": { "uid": "prometheus" },
       "targets": [
         {
           "expr": "sum(rate(http_requests_total[1m]))",
@@ -18,26 +21,75 @@
       "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 }
     },
     {
+      "id": 2,
       "type": "timeseries",
-      "title": "5xx Error Rate (%)",
+      "title": "4xx Error Rate (%)",
+      "datasource": { "uid": "prometheus" },
       "targets": [
         {
-          "expr": "(sum(rate(http_requests_total{status=~\"5..\"}[5m])) / sum(rate(http_requests_total[5m]))) * 100",
+          "expr": "(sum(rate(http_requests_total{status=~\"4..\"}[5m])) / sum(rate(http_requests_total[5m]))) * 100",
           "refId": "A"
         }
       ],
       "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 }
     },
     {
+      "id": 3,
       "type": "timeseries",
-      "title": "Latency P95 (seconds)",
+      "title": "5xx Error Rate (%)",
+      "datasource": { "uid": "prometheus" },
       "targets": [
         {
-          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))",
+          "expr": "(sum(rate(http_requests_total{status=~\"5..\"}[5m])) / sum(rate(http_requests_total[5m]))) * 100",
           "refId": "A"
         }
       ],
-      "gridPos": { "x": 0, "y": 8, "w": 24, "h": 8 }
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 }
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Latency (P50 / P95 / P99)",
+      "datasource": { "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P50",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P95",
+          "refId": "B"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "P99",
+          "refId": "C"
+        }
+      ],
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 }
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Service Availability",
+      "datasource": { "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "up{job=\"fastapi\"}",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "horizontal"
+      },
+      "gridPos": { "x": 0, "y": 16, "w": 24, "h": 6 }
     }
   ]
 }
