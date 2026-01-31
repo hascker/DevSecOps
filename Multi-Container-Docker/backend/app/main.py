@@ -162,7 +162,10 @@ def check_db():
 
 @app.get("/test-500")
 def test_500():
-    raise HTTPException(status_code=500, detail="Intentional 500 error for alert testing")
+    raise HTTPException(
+        status_code=500,
+        detail="Intentional 500 error for alert testing"
+    )
 
 @app.get("/metrics")
 def metrics():
