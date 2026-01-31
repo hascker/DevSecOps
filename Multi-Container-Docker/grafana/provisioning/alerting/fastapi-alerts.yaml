@@ -62,35 +62,3 @@ groups:
         annotations:
           summary: High 5xx error rate
           description: 5xx error rate has exceeded 2% for more than 3 minutes.
-
-      # ==================================================
-      # Alert 3: High Latency (P95 > 1s) 
-      # ==================================================
-      - uid: fastapi-latency-p95
-        title: High Latency (P95)
-        condition: A
-        for: 5m
-
-        data:
-          - refId: A
-            datasourceUid: prometheus
-            relativeTimeRange:
-              from: 600
-              to: 0
-            model:
-              expr: |
-                avg_over_time(
-                  histogram_quantile(
-                    0.95,
-                    sum(rate(http_request_duration_seconds_bucket[5m])) by (le)
-                  )[5m:]
-                )
-              refId: A
-
-        labels:
-          severity: warning
-          service: fastapi
-
-        annotations:
-          summary: High request latency
-          description: P95 latency has been above 1 second for more than 5 minutes.
