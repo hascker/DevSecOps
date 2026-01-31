@@ -5,60 +5,25 @@ groups:
     folder: FastAPI
     interval: 1m
     rules:
-
       - uid: fastapi-down
         title: FastAPI Service Down
-        condition: C
-        for: 5m
+        condition: A
+        for: 1m
+
         data:
           - refId: A
             datasourceUid: prometheus
+            relativeTimeRange:
+              from: 300
+              to: 0
             model:
-              expr: up{job="fastapi"}
+              expr: up{job="fastapi"} == 0
+              interval: ""
+              refId: A
 
-          - refId: B
-            model:
-              type: reduce
-              reducer: last
-
-          - refId: C
-            model:
-              type: threshold
-              conditions:
-                - evaluator:
-                    type: lt
-                    params: [1]
+        annotations:
+          summary: "FastAPI is down"
+          description: "FastAPI service has been unreachable for 1 minute"
 
         labels:
           severity: critical
-        annotations:
-          summary: FastAPI is down
-          description: FastAPI has been unreachable for more than 5 minutes.
-
-      - uid: fastapi-5xx
-        title: High 5xx Error Rate
-        condition: C
-        for: 3m
-        data:
-          - refId: A
-            datasourceUid: prometheus
-            model:
-              expr: |
-                (sum(rate(http_requests_total{status=~"5.."}[5m])) /
-                 sum(rate(http_requests_total[5m]))) * 100
-
-          - refId: B
-            model:
-              type: reduce
-              reducer: last
-
-          - refId: C
-            model:
-              type: threshold
-              conditions:
-                - evaluator:
-                    type: gt
-                    params: [2]
-
-        labels:
-          severity: warning
