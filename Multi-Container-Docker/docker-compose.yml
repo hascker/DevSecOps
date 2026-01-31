@@ -129,6 +129,9 @@ services:
       backend:
         condition: service_healthy
     read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
     restart: unless-stopped
 
 # ------------------------
