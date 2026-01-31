@@ -24,7 +24,7 @@ Security → Trivy
 
 ## 🖼️ Architecture Diagram
 
-Multi-Container-Docker/ArchImage.png
+
 
 ---
 
