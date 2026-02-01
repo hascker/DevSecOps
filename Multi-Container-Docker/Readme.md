@@ -121,26 +121,27 @@ Alerts are defined declaratively using YAML and loaded at Grafana startup.
 
 ---
 
-## ⚙️ CI Pipeline (GitHub Actions)
+## ⚙️ CI Pipeline
 
-1. Checkout repository
-2. Build Docker image
-3. Push image to Docker Hub
-4. Scan image using Trivy
-5. Fail pipeline on HIGH / CRITICAL vulnerabilities
-
----
+- Build Docker image
+- Push image to Docker Hub
+- Scan image with Trivy
+- Pipeline fails on **HIGH / CRITICAL** vulnerabilities
 
 ## 🚀 CD Pipeline
 
-```
-GitHub → Self-hosted Runner (EC2)
-       → docker compose pull
-       → docker compose up -d
-```
+- Deployment is triggered **only after CI succeeds**
+- Self-hosted GitHub runner pulls the latest code and Docker images
+- Runs:
+  ```bash
+  docker compose pull
+  docker compose up -d
+
 
 - No manual intervention required
-- Infrastructure treated as immutable
+
+- Application infrastructure treated as immutable (container-based deployments)
+
 - Observability components (dashboards & alerts) are provisioned automatically
 
 A self-hosted GitHub runner is used to maintain control over deployments and avoid exposing production credentials to shared runners.
