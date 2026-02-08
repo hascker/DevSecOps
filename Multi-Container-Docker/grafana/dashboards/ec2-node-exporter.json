@@ -1,68 +1,41 @@
 {
   "uid": "ec2-node",
-  "title": "EC2 Host Metrics",
+  "title": "EC2 Node Metrics",
   "timezone": "browser",
   "schemaVersion": 38,
   "version": 1,
-  "refresh": "10s",
   "panels": [
     {
       "type": "stat",
-      "title": "EC2 Status",
+      "title": "EC2 Memory Used %",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 6 },
       "targets": [
         {
-          "expr": "up{job=\"node-exporter\"}",
+          "expr": "(1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100",
           "refId": "A"
         }
       ],
       "fieldConfig": {
         "defaults": {
-          "mappings": [
-            { "type": "value", "options": { "0": { "text": "DOWN" }, "1": { "text": "UP" } } }
-          ],
-          "color": { "mode": "thresholds" },
-          "thresholds": {
-            "steps": [
-              { "color": "red", "value": 0 },
-              { "color": "green", "value": 1 }
-            ]
-          }
+          "unit": "percent"
         }
-      },
-      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 }
+      }
     },
     {
-      "type": "timeseries",
-      "title": "CPU Usage %",
+      "type": "stat",
+      "title": "Disk Used %",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 6 },
       "targets": [
         {
-          "expr": "100 - (avg by (instance)(rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
-          "refId": "A"
+          "expr": "100 - (node_filesystem_avail_bytes{mountpoint=\"/\"} * 100 / node_filesystem_size_bytes{mountpoint=\"/\"})",
+          "refId": "B"
         }
       ],
-      "gridPos": { "x": 6, "y": 0, "w": 18, "h": 6 }
-    },
-    {
-      "type": "timeseries",
-      "title": "Memory Usage %",
-      "targets": [
-        {
-          "expr": "100 * (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes))",
-          "refId": "A"
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent"
         }
-      ],
-      "gridPos": { "x": 0, "y": 6, "w": 12, "h": 6 }
-    },
-    {
-      "type": "timeseries",
-      "title": "Disk Usage %",
-      "targets": [
-        {
-          "expr": "100 * (1 - (node_filesystem_avail_bytes{mountpoint=\"/\"} / node_filesystem_size_bytes{mountpoint=\"/\"}))",
-          "refId": "A"
-        }
-      ],
-      "gridPos": { "x": 12, "y": 6, "w": 12, "h": 6 }
+      }
     }
   ]
 }
