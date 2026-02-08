@@ -136,13 +136,12 @@ services:
     restart: unless-stopped
 
   # ------------------------
-  # Node Exporter (EC2 Host Metrics)
+  # Node Exporter (EC2 Metrics)
   # ------------------------
   node-exporter:
     image: prom/node-exporter:v1.7.0
-    container_name: node-exporter
-    pid: host
-    network_mode: host
+    ports:
+      - "9100:9100"
     volumes:
       - /:/host:ro,rslave
     command:
