@@ -1,9 +1,21 @@
 global:
   scrape_interval: 5s
+  evaluation_interval: 5s
 
 scrape_configs:
+  # ------------------------
+  # FastAPI Metrics
+  # ------------------------
   - job_name: "fastapi"
     metrics_path: /metrics
     static_configs:
       - targets:
           - backend:8000
+
+  # ------------------------
+  # EC2 / Host Metrics
+  # ------------------------
+  - job_name: "node-exporter"
+    static_configs:
+      - targets:
+          - localhost:9100

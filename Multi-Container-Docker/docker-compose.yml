@@ -15,6 +15,30 @@ services:
     restart: unless-stopped
 
   # ------------------------
+  # Prometheus (Metrics)
+  # ------------------------
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=15d"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # ------------------------
   # Grafana (Dashboards & Alerts)
   # ------------------------
   grafana:
@@ -36,7 +60,6 @@ services:
       retries: 3
     restart: unless-stopped
 
-
   # ------------------------
   # Promtail (Log Shipper)
   # ------------------------
@@ -51,7 +74,7 @@ services:
     restart: unless-stopped
 
   # ------------------------
-  # PostgreSQL (Database)
+  # PostgreSQL
   # ------------------------
   db:
     image: postgres:15
@@ -95,30 +118,6 @@ services:
     restart: unless-stopped
 
   # ------------------------
-  # Prometheus (Metrics)
-  # ------------------------
-  prometheus:
-    image: prom/prometheus:v2.48.0
-    ports:
-      - "127.0.0.1:9090:9090"
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus_data:/prometheus
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--storage.tsdb.path=/prometheus"
-      - "--storage.tsdb.retention.time=15d"
-    depends_on:
-      backend:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:9090/-/healthy"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-    restart: unless-stopped
-
-  # ------------------------
   # Nginx (Reverse Proxy)
   # ------------------------
   nginx:
@@ -136,9 +135,20 @@ services:
       - /var/run
     restart: unless-stopped
 
-# ------------------------
-# Persistent Volumes
-# ------------------------
+  # ------------------------
+  # Node Exporter (EC2 Host Metrics)
+  # ------------------------
+  node-exporter:
+    image: prom/node-exporter:v1.7.0
+    container_name: node-exporter
+    pid: host
+    network_mode: host
+    volumes:
+      - /:/host:ro,rslave
+    command:
+      - "--path.rootfs=/host"
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   loki_data:
