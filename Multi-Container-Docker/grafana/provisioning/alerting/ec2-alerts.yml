@@ -13,7 +13,7 @@ groups:
         data:
           - refId: A
             datasourceUid: prometheus
-            relativeTimeRange:      # <--- ADD THIS BLOCK
+            relativeTimeRange:      
               from: 600             # Look back 10 minutes (600 seconds)
               to: 0
             model:

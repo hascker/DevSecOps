@@ -3,38 +3,75 @@
   "title": "EC2 Node Metrics",
   "timezone": "browser",
   "schemaVersion": 38,
-  "version": 1,
+  "version": 2,
   "panels": [
     {
       "type": "stat",
-      "title": "EC2 Memory Used %",
-      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 6 },
+      "title": "Memory: Used / Total",
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 6 },
       "targets": [
         {
-          "expr": "(1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100",
+          "expr": "node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes",
+          "legendFormat": "Used",
           "refId": "A"
+        },
+        {
+          "expr": "node_memory_MemTotal_bytes",
+          "legendFormat": "Total",
+          "refId": "B"
         }
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "percent"
+          "unit": "bytes",
+          "color": { "mode": "palette-classic" },
+          "custom": { "textMode": "value_and_name" }
+        }
+      },
+      "options": {
+        "textMode": "value_and_name",
+        "orientation": "horizontal",
+        "reduceOptions": { "values": true, "calcs": ["lastNotNull"] }
+      }
+    },
+    {
+      "type": "gauge",
+      "title": "Memory Used %",
+      "gridPos": { "x": 0, "y": 6, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "expr": "(1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100",
+          "refId": "C"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 70 },
+              { "color": "red", "value": 90 }
+            ]
+          }
         }
       }
     },
     {
       "type": "stat",
       "title": "Disk Used %",
-      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 6 },
+      "gridPos": { "x": 12, "y": 6, "w": 12, "h": 8 },
       "targets": [
         {
           "expr": "100 - (node_filesystem_avail_bytes{mountpoint=\"/\"} * 100 / node_filesystem_size_bytes{mountpoint=\"/\"})",
-          "refId": "B"
+          "refId": "D"
         }
       ],
       "fieldConfig": {
-        "defaults": {
-          "unit": "percent"
-        }
+        "defaults": { "unit": "percent" }
       }
     }
   ]
