@@ -3,7 +3,7 @@
   "title": "EC2 Node Metrics",
   "timezone": "browser",
   "schemaVersion": 38,
-  "version": 5,
+  "version": 6,
   "panels": [
     {
       "type": "gauge",
@@ -11,17 +11,17 @@
       "gridPos": { "x": 0, "y": 0, "w": 12, "h": 10 },
       "targets": [
         {
-          "expr": "node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes",
+          "expr": "((node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes) * 100",
           "refId": "A"
         }
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "bytes",
+          "unit": "percent",
           "min": 0,
-          "max": "node_memory_MemTotal_bytes",
+          "max": 100,
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               { "color": "green", "value": null },
               { "color": "orange", "value": 75 },
@@ -32,8 +32,8 @@
       },
       "options": {
         "reduceOptions": { "values": false, "calcs": ["lastNotNull"] },
-        "textMode": "value_and_max",
-        "showThresholdLabels": true,   
+        "textMode": "value",
+        "showThresholdLabels": true,
         "showThresholdMarkers": true
       }
     },
@@ -43,17 +43,17 @@
       "gridPos": { "x": 12, "y": 0, "w": 12, "h": 10 },
       "targets": [
         {
-          "expr": "node_filesystem_size_bytes{mountpoint=\"/\"} - node_filesystem_avail_bytes{mountpoint=\"/\"}",
+          "expr": "(1 - (node_filesystem_avail_bytes{mountpoint=\"/\"} / node_filesystem_size_bytes{mountpoint=\"/\"})) * 100",
           "refId": "B"
         }
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "bytes",
+          "unit": "percent",
           "min": 0,
-          "max": "node_filesystem_size_bytes{mountpoint=\"/\"}",
+          "max": 100,
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               { "color": "green", "value": null },
               { "color": "orange", "value": 80 },
@@ -64,8 +64,8 @@
       },
       "options": {
         "reduceOptions": { "values": false, "calcs": ["lastNotNull"] },
-        "textMode": "value_and_max",
-        "showThresholdLabels": true,   
+        "textMode": "value",
+        "showThresholdLabels": true,
         "showThresholdMarkers": true
       }
     }
