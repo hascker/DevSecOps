@@ -3,18 +3,22 @@ apiVersion: 1
 groups:
   - orgId: 1
     name: ec2-alerts
-    folder: Infrastructure  # <--- Added this (Must exist or Grafana will create it)
+    folder: Infrastructure
     interval: 1m
     rules:
       - uid: ec2-memory-high
         title: EC2 High Memory Usage
         condition: C
+        for: 5m
         data:
           - refId: A
             datasourceUid: prometheus
+            relativeTimeRange:      # <--- ADD THIS BLOCK
+              from: 600             # Look back 10 minutes (600 seconds)
+              to: 0
             model:
               expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
-              instant: false
+              instant: true
               refId: A
 
           - refId: B
@@ -39,7 +43,6 @@ groups:
                     type: and
                   reducer:
                     type: last
-        for: 5m
         annotations:
           summary: "EC2 memory usage above 80%"
         labels:
