@@ -50,19 +50,26 @@ jobs:
   # ==================================================
   cd:
     name: CD - Deploy to EC2
-    needs: ci                 
+    needs: ci
     runs-on: self-hosted
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Deploy latest code and images
+      - name: Sync and Deploy
         run: |
-          cd Multi-Container-Docker
-          git pull origin main
+          # 1. Target your actual working directory
+          TARGET_DIR="/home/ec2-user/OmerOps/Multi-Container-Docker"
+          
+          # 2. Sync files from GitHub workspace to the target folder
+          # This ensures 'prometheus/prometheus.yml' actually gets updated on the disk
+          rsync -avz --exclude='.git' ./Multi-Container-Docker/ $TARGET_DIR/
+          
+          # 3. Navigate and Restart
+          cd $TARGET_DIR
           docker compose pull
           docker compose up -d
-
-      - name: Verify running containers
-        run: docker ps
+          
+          # 4. Force Prometheus to read the new config
+          docker exec multi-container-docker-prometheus-1 kill -SIGHUP 1
