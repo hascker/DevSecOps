@@ -3,16 +3,15 @@
   "title": "EC2 Node Metrics",
   "timezone": "browser",
   "schemaVersion": 38,
-  "version": 3,
+  "version": 4,
   "panels": [
     {
       "type": "gauge",
-      "title": "Memory Usage (Used of Total)",
-      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "title": "Memory Usage (Used / Total)",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 10 },
       "targets": [
         {
           "expr": "node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes",
-          "legendFormat": "Used Memory",
           "refId": "A"
         }
       ],
@@ -30,16 +29,22 @@
             ]
           }
         }
+      },
+      "options": {
+        "reduceOptions": { "values": false, "calcs": ["lastNotNull"] },
+        "orientation": "auto",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "textMode": "value_and_max"  
       }
     },
     {
       "type": "gauge",
-      "title": "Disk Usage (Used of Total)",
-      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "title": "Disk Usage (Used / Total)",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 10 },
       "targets": [
         {
           "expr": "node_filesystem_size_bytes{mountpoint=\"/\"} - node_filesystem_avail_bytes{mountpoint=\"/\"}",
-          "legendFormat": "Used Disk",
           "refId": "B"
         }
       ],
@@ -57,6 +62,13 @@
             ]
           }
         }
+      },
+      "options": {
+        "reduceOptions": { "values": false, "calcs": ["lastNotNull"] },
+        "orientation": "auto",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "textMode": "value_and_max"  
       }
     }
   ]
