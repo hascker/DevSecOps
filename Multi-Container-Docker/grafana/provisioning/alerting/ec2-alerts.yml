@@ -1,7 +1,9 @@
 apiVersion: 1
 
 groups:
-  - name: ec2-alerts
+  - orgId: 1
+    name: ec2-alerts
+    folder: Infrastructure  # <--- Added this (Must exist or Grafana will create it)
     interval: 1m
     rules:
       - uid: ec2-memory-high
@@ -13,19 +15,22 @@ groups:
             model:
               expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
               instant: false
+              refId: A
 
           - refId: B
             datasourceUid: __expr__
             model:
               type: reduce
               reducer: last
-              input: A
+              expression: A
+              refId: B
 
           - refId: C
             datasourceUid: __expr__
             model:
               type: threshold
-              input: B
+              expression: B
+              refId: C
               conditions:
                 - evaluator:
                     type: gt
