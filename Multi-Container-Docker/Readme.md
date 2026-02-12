@@ -61,6 +61,7 @@ Refer to the architecture diagram available in the repository.
 - Grafana (dashboards & alerting)
 - Loki (log aggregation)
 - Promtail (log shipping)
+- Node Exporter (EC2 host metrics)
 
 ### DevSecOps
 - GitHub Actions (CI/CD)
@@ -97,23 +98,35 @@ Container Logs → Promtail → Loki → Grafana
 ### Metrics
 ```
 FastAPI → /metrics → Prometheus → Grafana
+Node Exporter → Prometheus → Grafana
 ```
 
 - FastAPI exposes Prometheus-compatible metrics
 - Prometheus scrapes `backend:8000/metrics`
-- Grafana dashboards and alert rules are **provisioned as code** using JSON and YAML, following a GitOps approach
+- Node Exporter exposes EC2 host-level metrics (CPU, memory, disk)
+- Grafana dashboards and alert rules are **provisioned as code** using JSON and YAML,          following a GitOps approach
 
 ---
 
 ## 📈 Grafana Dashboards
 
-Dashboards are provisioned automatically at startup.
+Dashboards are provisioned automatically at startup using a GitOps approach:
+- **Dashboard JSONs** stored in `grafana/dashboards/`
+- **Provider configs** stored in `grafana/provisioning/dashboards/`
+- Mounted to `/etc/grafana/dashboards` and `/etc/grafana/provisioning` in the container
 
+### Application Metrics (FastAPI)
 Tracked KPIs:
 - Request rate
 - Error rate (4xx / 5xx)
 - Latency (P50 / P95 / P99)
 - Service availability (UP/DOWN using Prometheus `up` metric)
+
+### Infrastructure Metrics (EC2 Node Exporter)
+Tracked KPIs:
+- Memory usage (used/total)
+- Disk usage (used/total)
+- CPU utilization
 
 > Latency metrics are visualized for analysis, while alerting thresholds are intentionally kept minimal to reduce noise.
 
