@@ -44,6 +44,7 @@ Docker Compose will start:
 - Grafana
 - Loki
 - Promtail
+- Node Exporter (EC2 host metrics)
 
 ---
 
@@ -120,8 +121,8 @@ docker compose up -d
 
 | Service | URL |
 |------|----|
-| Application | http://<EC2_PUBLIC_IP> |
-| Grafana | http://<EC2_PUBLIC_IP>:3000 |
+| Application | http://52.0.84.95 |
+| Grafana | http://52.0.84.95:3000 |
 
 ---
 
@@ -198,6 +199,25 @@ docker compose up -d
 ```
 
 Grafana dashboards and alerts are fully reproducible from code.
+
+### Grafana Provisioning Structure
+```
+grafana/
+├── dashboards/                    → Dashboard JSON files
+│   ├── ec2-node-exporter.json
+│   └── fastapi-sre-dashboard.json
+└── provisioning/                  → Provider configs
+    ├── dashboards/
+    │   ├── dashboards.yml         → FastAPI dashboard provider
+    │   └── ec2-dashboard.yml      → EC2 dashboard provider
+    ├── datasources/
+    │   └── prometheus.yaml
+    └── alerting/
+        ├── ec2-alerts.yml
+        └── fastapi-alerts.yaml
+```
+
+Dashboards are auto-loaded from `/etc/grafana/dashboards` at startup.
 
 ---
 

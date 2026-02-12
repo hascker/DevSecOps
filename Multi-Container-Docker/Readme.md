@@ -185,6 +185,7 @@ A self-hosted GitHub runner is used to maintain control over deployments and avo
 - Docker Compose used as the runtime orchestrator
 - Prometheus is bound to localhost and not exposed publicly, reducing the external attack surface
 - Grafana exposed securely for visualization and alerting
+- **Live Demo:** http://52.0.84.95 (Application) | http://52.0.84.95:3000 (Grafana)
 
 ---
 
