@@ -43,7 +43,7 @@ Security → Trivy
 ---
 
 ## 🖼️ Architecture Diagram
-![alt text](devsecops-architecture.png)
+![alt text](devsecops-architecture-diagram.png)
 Refer to the architecture diagram available in the repository.
 
 ---
