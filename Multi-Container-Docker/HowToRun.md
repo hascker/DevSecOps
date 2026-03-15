@@ -25,7 +25,7 @@ docker compose version
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/omermd529/OmerOps.git
+git clone https://github.com/hascker/OmerOps.git
 cd Multi-Container-Docker
 ```
 
@@ -104,7 +104,7 @@ newgrp docker
 
 ### 4️⃣ Clone the Repository
 ```bash
-git clone https://github.com/omermd529/OmerOps.git
+git clone https://github.com/hascker/OmerOps.git
 cd Multi-Container-Docker
 ```
 

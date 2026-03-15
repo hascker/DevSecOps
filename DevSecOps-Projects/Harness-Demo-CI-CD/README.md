@@ -1,7 +1,7 @@
 # ⚙️ Harness Demo – CI/CD Pipeline
 
 [![Gitleaks](https://img.shields.io/badge/secrets%20scan-Gitleaks%20Enabled-brightgreen?logo=github&logoColor=white)](https://github.com/zricethezav/gitleaks)
-[![GitLab Repo](https://img.shields.io/badge/code-GitLab-blue?logo=gitlab)](https://gitlab.com/omermd529/harness-demo)
+[![GitLab Repo](https://img.shields.io/badge/code-GitLab-blue?logo=gitlab)](https://gitlab.com/hascker/harness-demo)
 
 A hands-on DevSecOps project showcasing a **CI/CD pipeline** built with **GitLab CI/CD**, **Docker**, and **AWS EC2**.  
 The pipeline automates testing, building, pushing to Docker Hub, and deploying a Flask app on an EC2 instance.
@@ -152,4 +152,4 @@ kubectl apply -f manifest.yaml
 
 ## 🔗 Source Code
 The complete **source code** and pipeline configuration are hosted on **GitLab**:  
-👉 [https://gitlab.com/omermd529/harness-demo](https://gitlab.com/omermd529/harness-demo)  
+👉 [https://gitlab.com/hascker/harness-demo](https://gitlab.com/hascker/harness-demo)  

@@ -97,7 +97,7 @@ Access at: [http://localhost:8080](http://localhost:8080)
 If you'd like to connect professionally or are a recruiter looking for a skilled DevOps/Cloud Engineer, feel free to reach out:
 
 - **LinkedIn:** [linkedin.com/in/mdomer529](https://linkedin.com/in/mdomer529)
-- **Email:** omermd529@gmail.com
+- **GitHub:** [https://github.com/hascker](https://github.com/hascker)
 - **Phone:** +91-9032448366
 
 I’m actively open to remote **DevOps** or **DevSecOps** opportunities with a focus on:
